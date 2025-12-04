@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Companies - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-building"></i> Companies</h1>
+        <p class="subtitle">Organizations in your network</p>
+    </div>
+
+    {% if companies %}
+    <div class="cards-grid">
+        {% for company in companies %}
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ company.Name }}</h3>
+                {% if company.Stock %}
+                <span class="badge badge-success">{{ company.Stock }}</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ company.Address }}</span>
+                </div>
+                {% if company.Industry %}
+                <div class="info-row">
+                    <i class="fas fa-industry"></i>
+                    <span>{{ company.Industry }}</span>
+                </div>
+                {% endif %}
+                {% if company.Num_Employees %}
+                <div class="info-row">
+                    <i class="fas fa-users"></i>
+                    <span>{{ company.Num_Employees }} employees</span>
+                </div>
+                {% endif %}
+                {% if company.Phone_Num %}
+                <div class="info-row">
+                    <i class="fas fa-phone"></i>
+                    <span>{{ company.Phone_Num }}</span>
+                </div>
+                {% endif %}
+                {% if company.Email %}
+                <div class="info-row">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:{{ company.Email }}" class="link">{{ company.Email }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-building"></i>
+        <p>No companies found</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

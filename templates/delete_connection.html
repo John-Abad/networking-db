@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Connection - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-user-times"></i> Delete Connection</h1>
+        <p class="subtitle">Remove a connection and all related data.</p>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" class="form">
+            <div class="form-group">
+                <label for="connect_n"><i class="fas fa-handshake"></i> Connection</label>
+                <select name="connect_n" id="connect_n" required>
+                    <option value="">Select a connection to delete</option>
+                    {% for conn in connections %}
+                    <option value="{{ conn.Name }}">{{ conn.Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <p class="subtitle" style="color:#b91c1c;">
+                This will delete all conversations, work history, and education entries linked to this connection.
+            </p>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" style="background: #ef4444;">
+                    <i class="fas fa-trash"></i> Delete Connection
+                </button>
+                <a href="{{ url_for('connections') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    {% if deleted_summary %}
+    <div class="dashboard-section" style="margin-top:2rem;">
+        <div class="section-header">
+            <h2><i class="fas fa-list"></i> Deletion Summary</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Talked</th>
+                        <th>Worked</th>
+                        <th>Went_To</th>
+                        <th>ConnectionC</th>
+                        <th>Connection</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ deleted_summary.TalkedDeleted }}</td>
+                        <td>{{ deleted_summary.WorkedDeleted }}</td>
+                        <td>{{ deleted_summary.WentToDeleted }}</td>
+                        <td>{{ deleted_summary.ConnectionCDeleted }}</td>
+                        <td>{{ deleted_summary.ConnectionDeleted }}</td>
+                        <td>{{ deleted_summary.TotalDeleted }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

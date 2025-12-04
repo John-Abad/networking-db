@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Job Applications - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-file-alt"></i> Job Applications</h1>
+        <p class="subtitle">Tracked job applications</p>
+    </div>
+
+    {% if applications %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Job</th>
+                    <th>Recruiter</th>
+                    <th>Start Date</th>
+                    <th>Complete Date</th>
+                    <th>Posted</th>
+                    <th>Resume</th>
+                    <th>Cover Letter</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td><strong>{{ app.UserName }}</strong></td>
+                    <td>{{ app.Job }}</td>
+                    <td>{{ app.Recruiter or 'N/A' }}</td>
+                    <td>{{ app.Start.strftime('%Y-%m-%d') if app.Start else 'N/A' }}</td>
+                    <td>{{ app.Complete.strftime('%Y-%m-%d') if app.Complete else 'N/A' }}</td>
+                    <td>{{ app.Posted.strftime('%Y-%m-%d %H:%M') if app.Posted else 'N/A' }}</td>
+                    <td>
+                        {% if app.Resume %}
+                        <span class="badge badge-success"><i class="fas fa-check"></i> Yes</span>
+                        {% else %}
+                        <span class="badge badge-secondary"><i class="fas fa-times"></i> No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.Cover_L %}
+                        <span class="badge badge-success"><i class="fas fa-check"></i> Yes</span>
+                        {% else %}
+                        <span class="badge badge-secondary"><i class="fas fa-times"></i> No</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-file-alt"></i>
+        <p>No job applications found</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

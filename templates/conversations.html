@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Conversations - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-comments"></i> Conversations</h1>
+        <p class="subtitle">All logged interactions</p>
+        <a href="{{ url_for('add_conversation') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Conversation
+        </a>
+    </div>
+
+    {% if conversations %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Connection</th>
+                    <th>Topic</th>
+                    <th>Method</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for conv in conversations %}
+                <tr>
+                    <td><strong>{{ conv.UserName }}</strong></td>
+                    <td>{{ conv.ConnectionName }}</td>
+                    <td>{{ conv.Topic }}</td>
+                    <td><span class="badge badge-info">{{ conv.Method }}</span></td>
+                    <td>{{ conv.Start.strftime('%Y-%m-%d %H:%M') if conv.Start else 'N/A' }}</td>
+                    <td>{{ conv.End.strftime('%Y-%m-%d %H:%M') if conv.End else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-comments"></i>
+        <p>No conversations found</p>
+        <a href="{{ url_for('add_conversation') }}" class="btn btn-primary">Add First Conversation</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Search - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-search"></i> Search</h1>
+        <p class="subtitle">Find people, companies, and more</p>
+    </div>
+
+    <div class="search-container">
+        <form method="GET" action="{{ url_for('search') }}" class="search-form">
+            <div class="search-input-group">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search for users, connections, companies..." class="search-input" autofocus>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if query %}
+    <div class="search-results">
+        <h2>Search Results for "{{ query }}"</h2>
+        
+        {% if results %}
+        <div class="results-list">
+            {% for result in results %}
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="badge badge-{{ 'primary' if result.type == 'User' else 'info' if result.type == 'Connection' else 'success' }}">
+                        {{ result.type }}
+                    </span>
+                    <h3>{{ result.title }}</h3>
+                </div>
+                <div class="result-body">
+                    {% if result.subtitle %}
+                    <p><i class="fas fa-map-marker-alt"></i> {{ result.subtitle }}</p>
+                    {% endif %}
+                    {% if result.extra %}
+                    <p><i class="fas fa-info-circle"></i> {{ result.extra }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No results found for "{{ query }}"</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

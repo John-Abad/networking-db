@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Update Conversation - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-edit"></i> Update Conversation</h1>
+        <p class="subtitle">Select a conversation and update its details.</p>
+    </div>
+
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2><i class="fas fa-comments"></i> Conversations</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Connection</th>
+                        <th>Topic</th>
+                        <th>Method</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for conv in conversations %}
+                    <tr>
+                        <td>{{ conv.User_N }}</td>
+                        <td>{{ conv.Connect_N }}</td>
+                        <td>{{ conv.Topic }}</td>
+                        <td>{{ conv.Method }}</td>
+                        <td>{{ conv.Start }}</td>
+                        <td>{{ conv.End }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-container" style="margin-top:2rem;">
+        <form method="POST" class="form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="user_n"><i class="fas fa-user"></i> User</label>
+                    <input type="text" name="user_n" id="user_n" required placeholder="Exact User_N from table above">
+                </div>
+                <div class="form-group">
+                    <label for="connect_n"><i class="fas fa-handshake"></i> Connection</label>
+                    <input type="text" name="connect_n" id="connect_n" required placeholder="Exact Connect_N from table above">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="key_start"><i class="fas fa-key"></i> Original Start Timestamp</label>
+                <input type="text" name="key_start" id="key_start" required placeholder="YYYY-MM-DD HH:MM:SS">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new_topic"><i class="fas fa-comment"></i> New Topic (optional)</label>
+                    <input type="text" name="new_topic" id="new_topic" placeholder="Leave blank to keep current">
+                </div>
+                <div class="form-group">
+                    <label for="new_method"><i class="fas fa-phone"></i> New Method (optional)</label>
+                    <input type="text" name="new_method" id="new_method" placeholder="Leave blank to keep current">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="new_start"><i class="fas fa-clock"></i> New Start (optional)</label>
+                    <input type="datetime-local" name="new_start" id="new_start">
+                </div>
+                <div class="form-group">
+                    <label for="new_end"><i class="fas fa-clock"></i> New End (optional)</label>
+                    <input type="datetime-local" name="new_end" id="new_end">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if updated_row %}
+    <div class="dashboard-section" style="margin-top:2rem;">
+        <div class="section-header">
+            <h2><i class="fas fa-check-circle"></i> Updated Conversation</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Connection</th>
+                        <th>Topic</th>
+                        <th>Method</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ updated_row.User_N }}</td>
+                        <td>{{ updated_row.Connect_N }}</td>
+                        <td>{{ updated_row.Topic }}</td>
+                        <td>{{ updated_row.Method }}</td>
+                        <td>{{ updated_row.Start }}</td>
+                        <td>{{ updated_row.End }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Schools - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-graduation-cap"></i> Schools</h1>
+        <p class="subtitle">Educational institutions</p>
+    </div>
+
+    {% if schools %}
+    <div class="cards-grid">
+        {% for school in schools %}
+        <div class="card">
+            <div class="card-header">
+                <h3>{{ school.Name }}</h3>
+                {% if school.Ranking %}
+                <span class="badge badge-warning">Rank #{{ school.Ranking }}</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ school.Address }}</span>
+                </div>
+                {% if school.Enrollment %}
+                <div class="info-row">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>{{ school.Enrollment }} students</span>
+                </div>
+                {% endif %}
+                {% if school.Phone_Num %}
+                <div class="info-row">
+                    <i class="fas fa-phone"></i>
+                    <span>{{ school.Phone_Num }}</span>
+                </div>
+                {% endif %}
+                {% if school.Email %}
+                <div class="info-row">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:{{ school.Email }}" class="link">{{ school.Email }}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-graduation-cap"></i>
+        <p>No schools found</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

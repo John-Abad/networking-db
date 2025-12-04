@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Network Search - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-filter"></i> Network Search</h1>
+        <p class="subtitle">Find who you know at specific companies, industries, or cities.</p>
+    </div>
+
+    <div class="form-container">
+        <form method="GET" class="form" action="{{ url_for('search_network') }}">
+            <div class="form-group">
+                <label for="user_n"><i class="fas fa-user"></i> You (User)</label>
+                <select name="user_n" id="user_n" required>
+                    <option value="">Select yourself</option>
+                    {% for u in users %}
+                    <option value="{{ u.Name }}" {% if selected_user == u.Name %}selected{% endif %}>{{ u.Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="company"><i class="fas fa-building"></i> Company (optional)</label>
+                    <input type="text" name="company" id="company" value="{{ company }}" placeholder="Company name contains...">
+                </div>
+                <div class="form-group">
+                    <label for="industry"><i class="fas fa-industry"></i> Industry (optional)</label>
+                    <input type="text" name="industry" id="industry" value="{{ industry }}" placeholder="Industry contains...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="city"><i class="fas fa-city"></i> City (optional)</label>
+                <input type="text" name="city" id="city" value="{{ city }}" placeholder="Location contains...">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if results %}
+    <div class="dashboard-section" style="margin-top:2rem;">
+        <div class="section-header">
+            <h2><i class="fas fa-users"></i> Matching Connections</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Company</th>
+                        <th>Industry</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td>{{ r.Name }}</td>
+                        <td>{{ r.Role }}</td>
+                        <td>{{ r.Company }}</td>
+                        <td>{{ r.Industry or 'N/A' }}</td>
+                        <td>{{ r.Location }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% elif selected_user %}
+    <div class="empty-state">
+        <i class="fas fa-users"></i>
+        <p>No matching connections for these filters.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

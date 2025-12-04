@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Work Experience - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-briefcase"></i> Work Experience</h1>
+        <p class="subtitle">Employment history</p>
+    </div>
+
+    {% if work_experience %}
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Organization</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Location</th>
+                    <th>Industry</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work in work_experience %}
+                <tr>
+                    <td><strong>{{ work.Name }}</strong></td>
+                    <td>{{ work.OrgName }}</td>
+                    <td>{{ work.Role }}</td>
+                    <td>{{ work.Department or 'N/A' }}</td>
+                    <td>{{ work.Location or 'N/A' }}</td>
+                    <td>
+                        {% if work.Industry %}
+                        <span class="badge badge-info">{{ work.Industry }}</span>
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ work.Start.strftime('%Y-%m-%d') if work.Start else 'N/A' }}</td>
+                    <td>
+                        {% if work.End %}
+                        {{ work.End.strftime('%Y-%m-%d') }}
+                        {% else %}
+                        <span class="badge badge-success">Current</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-briefcase"></i>
+        <p>No work experience records found</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

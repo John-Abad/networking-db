@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Add Work Experience - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-briefcase"></i> Add Work Experience</h1>
+        <p class="subtitle">Insert a new role for yourself or a connection.</p>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" class="form">
+            <div class="form-group">
+                <label for="name"><i class="fas fa-user"></i> Person</label>
+                <select name="name" id="name" required>
+                    <option value="">Select person</option>
+                    {% for p in people %}
+                    <option value="{{ p.Name }}">{{ p.Name }} ({{ p.source }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="org_n"><i class="fas fa-building"></i> Organization Name</label>
+                    <input type="text" name="org_n" id="org_n" required>
+                </div>
+                <div class="form-group">
+                    <label for="org_a"><i class="fas fa-map-marker-alt"></i> Organization Address</label>
+                    <input type="text" name="org_a" id="org_a">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="role"><i class="fas fa-id-badge"></i> Role</label>
+                    <input type="text" name="role" id="role" required>
+                </div>
+                <div class="form-group">
+                    <label for="dept"><i class="fas fa-sitemap"></i> Department</label>
+                    <input type="text" name="dept" id="dept">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start"><i class="fas fa-calendar-plus"></i> Start Date</label>
+                    <input type="date" name="start" id="start" required>
+                </div>
+                <div class="form-group">
+                    <label for="end"><i class="fas fa-calendar-minus"></i> End Date</label>
+                    <input type="date" name="end" id="end">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="job_loc"><i class="fas fa-location-dot"></i> Job Location</label>
+                    <input type="text" name="job_loc" id="job_loc">
+                </div>
+                <div class="form-group">
+                    <label for="industry"><i class="fas fa-industry"></i> Industry</label>
+                    <input type="text" name="industry" id="industry">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="num_employees"><i class="fas fa-users"></i> # of Employees</label>
+                    <input type="number" name="num_employees" id="num_employees" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="stock"><i class="fas fa-chart-line"></i> Stock Symbol</label>
+                    <input type="text" name="stock" id="stock">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Add Experience
+                </button>
+                <a href="{{ url_for('work_experience') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

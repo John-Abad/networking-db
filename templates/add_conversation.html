@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Add Connection & Conversation - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-plus-circle"></i> Add Connection by Talking</h1>
+        <p class="subtitle">Create a connection, log the conversation, and optionally add work or school info.</p>
+    </div>
+
+    <div class="form-container">
+        <form method="POST" class="form">
+            <!-- User -->
+            <div class="form-group">
+                <label for="user_n"><i class="fas fa-user"></i> You (User)</label>
+                <select name="user_n" id="user_n" required>
+                    <option value="">Select yourself</option>
+                    {% for user in users %}
+                    <option value="{{ user.Name }}">{{ user.Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Connection info -->
+            <h3 class="subtitle" style="margin-top:1.5rem;">Connection Information</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="connect_n_existing"><i class="fas fa-handshake"></i> Existing Connection</label>
+                    <select name="connect_n_existing" id="connect_n_existing">
+                        <option value="">Select existing (optional)</option>
+                        {% for conn in connections %}
+                        <option value="{{ conn.Name }}">{{ conn.Name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="connect_n_new"><i class="fas fa-user-plus"></i> Or New Connection Name</label>
+                    <input type="text" name="connect_n_new" id="connect_n_new" placeholder="e.g. Grace Kim">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="relation"><i class="fas fa-link"></i> Relation</label>
+                    <input type="text" name="relation" id="relation" placeholder="Former manager, recruiter, alumni...">
+                </div>
+                <div class="form-group">
+                    <label for="addr"><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <input type="text" name="addr" id="addr" placeholder="Street, City">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" name="email" id="email" placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Phone</label>
+                    <input type="text" name="phone" id="phone" placeholder="555-0000">
+                </div>
+            </div>
+
+            <!-- Conversation -->
+            <h3 class="subtitle" style="margin-top:1.5rem;">Conversation Log</h3>
+            <div class="form-group">
+                <label for="topic"><i class="fas fa-comment"></i> Topic</label>
+                <input type="text" name="topic" id="topic" required placeholder="What was discussed?">
+            </div>
+
+            <div class="form-group">
+                <label for="method"><i class="fas fa-phone"></i> Method</label>
+                <select name="method" id="method" required>
+                    <option value="">Select method</option>
+                    <option value="Phone">Phone</option>
+                    <option value="Email">Email</option>
+                    <option value="Zoom">Zoom</option>
+                    <option value="In-Person">In-Person</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start"><i class="fas fa-clock"></i> Start Time</label>
+                    <input type="datetime-local" name="start" id="start" required>
+                </div>
+                <div class="form-group">
+                    <label for="end"><i class="fas fa-clock"></i> End Time</label>
+                    <input type="datetime-local" name="end" id="end" required>
+                </div>
+            </div>
+
+            <!-- Optional work experience -->
+            <h3 class="subtitle" style="margin-top:1.5rem;">Optional: Connection's Work Experience</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="org_n"><i class="fas fa-building"></i> Company Name</label>
+                    <input type="text" name="org_n" id="org_n" placeholder="e.g. Acme Corp">
+                </div>
+                <div class="form-group">
+                    <label for="org_a"><i class="fas fa-map-marker-alt"></i> Company Address</label>
+                    <input type="text" name="org_a" id="org_a" placeholder="Address of the company">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="role"><i class="fas fa-id-badge"></i> Role</label>
+                    <input type="text" name="role" id="role" placeholder="Job title">
+                </div>
+                <div class="form-group">
+                    <label for="dept"><i class="fas fa-sitemap"></i> Department</label>
+                    <input type="text" name="dept" id="dept" placeholder="Department">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="job_loc"><i class="fas fa-location-dot"></i> Job Location</label>
+                    <input type="text" name="job_loc" id="job_loc" placeholder="City">
+                </div>
+                <div class="form-group">
+                    <label for="industry"><i class="fas fa-industry"></i> Industry</label>
+                    <input type="text" name="industry" id="industry" placeholder="Technology, Consulting...">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="num_employees"><i class="fas fa-users"></i> # of Employees</label>
+                    <input type="number" name="num_employees" id="num_employees" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="stock"><i class="fas fa-chart-line"></i> Stock Symbol</label>
+                    <input type="text" name="stock" id="stock">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="job_start"><i class="fas fa-calendar-plus"></i> Job Start</label>
+                    <input type="date" name="job_start" id="job_start">
+                </div>
+                <div class="form-group">
+                    <label for="job_end"><i class="fas fa-calendar-minus"></i> Job End</label>
+                    <input type="date" name="job_end" id="job_end">
+                </div>
+            </div>
+
+            <!-- Optional school -->
+            <h3 class="subtitle" style="margin-top:1.5rem;">Optional: Connection's Education</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="school_n"><i class="fas fa-university"></i> School Name</label>
+                    <input type="text" name="school_n" id="school_n" placeholder="State University">
+                </div>
+                <div class="form-group">
+                    <label for="deg_type"><i class="fas fa-graduation-cap"></i> Degree Type</label>
+                    <input type="text" name="deg_type" id="deg_type" placeholder="Undergraduate, Graduate...">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="subject"><i class="fas fa-book-open"></i> Subject</label>
+                    <input type="text" name="subject" id="subject" placeholder="Computer Science, HR...">
+                </div>
+                <div class="form-group">
+                    <label for="graduation"><i class="fas fa-calendar-check"></i> Graduation Date</label>
+                    <input type="date" name="graduation" id="graduation">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Connection & Conversation
+                </button>
+                <a href="{{ url_for('conversations') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

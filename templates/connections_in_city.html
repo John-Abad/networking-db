@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Connections in City - Network Assistant{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-city"></i> Connections in City</h1>
+        <p class="subtitle">Find who you know in a specific city, by home address or work location.</p>
+    </div>
+
+    <div class="form-container">
+        <form method="GET" class="form" action="{{ url_for('connections_in_city') }}">
+            <div class="form-group">
+                <label for="user_n"><i class="fas fa-user"></i> You (User)</label>
+                <select name="user_n" id="user_n" required>
+                    <option value="">Select yourself</option>
+                    {% for u in users %}
+                    <option value="{{ u.Name }}" {% if selected_user == u.Name %}selected{% endif %}>{{ u.Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="city"><i class="fas fa-city"></i> City</label>
+                <input type="text" name="city" id="city" value="{{ city }}" placeholder="e.g. Nashville">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Find Connections
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if home_results or work_results %}
+    <div class="dashboard-section" style="margin-top:2rem;">
+        <div class="section-header">
+            <h2><i class="fas fa-home"></i> Home Address Matches</h2>
+        </div>
+        {% if home_results %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in home_results %}
+                    <tr>
+                        <td>{{ r.Name }}</td>
+                        <td>{{ r.Address }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-home"></i>
+            <p>No home address matches.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-section" style="margin-top:2rem;">
+        <div class="section-header">
+            <h2><i class="fas fa-briefcase"></i> Work Location Matches</h2>
+        </div>
+        {% if work_results %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Role</th>
+                        <th>Company</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in work_results %}
+                    <tr>
+                        <td>{{ r.Name }}</td>
+                        <td>{{ r.Location }}</td>
+                        <td>{{ r.Role }}</td>
+                        <td>{{ r.Company }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-briefcase"></i>
+            <p>No work location matches.</p>
+        </div>
+        {% endif %}
+    </div>
+    {% elif selected_user and city %}
+    <div class="empty-state">
+        <i class="fas fa-city"></i>
+        <p>No connections found in {{ city }} for {{ selected_user }}.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

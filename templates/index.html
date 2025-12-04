@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Networking Assistant{% endblock %}
+
+{% block content %}
+<div class="landing">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-left">
+            <p class="hero-kicker">Networking Assistant</p>
+            <h1>Turn Every Conversation into a Lasting Relationship</h1>
+            <p class="hero-subtitle">
+                Welcome to your centralized hub for tracking conversations, organizations,
+                and opportunities all in one place.
+            </p>
+
+            <form method="GET" action="{{ url_for('search') }}" class="hero-search">
+                <label class="hero-search-label">
+                    <span>Search contacts,<br>companies, or industries...</span>
+                </label>
+                <div class="hero-search-input-row">
+                    <input
+                        type="text"
+                        name="q"
+                        class="hero-search-input"
+                        placeholder="Start typing a name, company, or industry..."
+                    >
+                    <button type="submit" class="hero-search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <section class="manage-connections">
+                <h2>Manage your connections</h2>
+                <div class="manage-buttons">
+                    <a href="{{ url_for('add_conversation') }}" class="btn hero-btn hero-btn-primary">
+                        Add a new connection
+                    </a>
+                    <a href="{{ url_for('update_conversation') }}" class="btn hero-btn hero-btn-dark">
+                        Update a conversation
+                    </a>
+                    <a href="{{ url_for('delete_connection') }}" class="btn hero-btn hero-btn-danger">
+                        Remove a connection
+                    </a>
+                    <a href="{{ url_for('add_work_experience') }}" class="btn hero-btn hero-btn-dark">
+                        Update my experience
+                    </a>
+                </div>
+            </section>
+        </div>
+        <div class="hero-right">
+            <div class="hero-photo-card">
+                <img src="https://images.pexels.com/photos/1181567/pexels-photo-1181567.jpeg?auto=compress&cs=tinysrgb&w=900"
+                     alt="Professional team" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard metrics strip -->
+    <section class="dashboard-strip">
+        <h2>Your Dashboard</h2>
+        <div class="dashboard-strip-grid">
+            <div class="dashboard-strip-labels">
+                <p>👥 Total Connections</p>
+                <p>🏢 Organizations Represented</p>
+                <p>💬 Recent Conversations</p>
+                <p>📅 Follow-Ups Due</p>
+                <p>📄 Active Applications</p>
+                <p>🏙 Top City</p>
+            </div>
+            <div class="dashboard-strip-values">
+                <p>{{ stats.connections }} Contacts</p>
+                <p>{{ stats.companies }} Companies / {{ stats.schools }} Schools</p>
+                <p>
+                    {% if recent_talks and recent_talks[0].Start %}
+                        Spoke w/ {{ recent_talks[0].ConnectionName }} {{ recent_talks[0].Start.strftime('%b %-d') }}
+                    {% else %}
+                        No recent conversations
+                    {% endif %}
+                </p>
+                <p>— Overdue</p>
+                <p>— Open Applications</p>
+                <p>— Contacts in top city</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+

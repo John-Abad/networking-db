@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Network Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-network-wired"></i>
+                <span>Network Assistant</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}" class="nav-link"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('users') }}" class="nav-link"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="{{ url_for('connections') }}" class="nav-link"><i class="fas fa-handshake"></i> Connections</a></li>
+                <li><a href="{{ url_for('companies') }}" class="nav-link"><i class="fas fa-building"></i> Companies</a></li>
+                <li><a href="{{ url_for('schools') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Schools</a></li>
+                <li><a href="{{ url_for('conversations') }}" class="nav-link"><i class="fas fa-comments"></i> Conversations</a></li>
+                <li><a href="{{ url_for('work_experience') }}" class="nav-link"><i class="fas fa-briefcase"></i> Work</a></li>
+                <li><a href="{{ url_for('applications') }}" class="nav-link"><i class="fas fa-file-alt"></i> Applications</a></li>
+                <li><a href="{{ url_for('education') }}" class="nav-link"><i class="fas fa-book"></i> Education</a></li>
+                <li><a href="{{ url_for('search') }}" class="nav-link"><i class="fas fa-search"></i> Search</a></li>
+                <li><a href="{{ url_for('search_network') }}" class="nav-link"><i class="fas fa-filter"></i> Network Search</a></li>
+                <li><a href="{{ url_for('connections_in_city') }}" class="nav-link"><i class="fas fa-city"></i> Cities</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
+
