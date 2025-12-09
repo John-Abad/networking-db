@@ -14,7 +14,7 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Person</th>
                     <th>School</th>
                     <th>Type</th>
                     <th>Subject</th>
@@ -26,7 +26,11 @@
             <tbody>
                 {% for edu in education %}
                 <tr>
-                    <td><strong>{{ edu.UserName }}</strong></td>
+                    <td>
+                        <strong>{{ edu.PersonName or edu.Name }}</strong>
+                        <br>
+                        <small class="text-muted">{{ edu.PersonType }}</small>
+                    </td>
                     <td>{{ edu.SchoolName }}</td>
                     <td><span class="badge badge-info">{{ edu.Type }}</span></td>
                     <td>{{ edu.Subject or 'N/A' }}</td>

@@ -43,20 +43,18 @@
 
     <div class="form-container" style="margin-top:2rem;">
         <form method="POST" class="form">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="user_n"><i class="fas fa-user"></i> User</label>
-                    <input type="text" name="user_n" id="user_n" required placeholder="Exact User_N from table above">
-                </div>
-                <div class="form-group">
-                    <label for="connect_n"><i class="fas fa-handshake"></i> Connection</label>
-                    <input type="text" name="connect_n" id="connect_n" required placeholder="Exact Connect_N from table above">
-                </div>
-            </div>
-
             <div class="form-group">
-                <label for="key_start"><i class="fas fa-key"></i> Original Start Timestamp</label>
-                <input type="text" name="key_start" id="key_start" required placeholder="YYYY-MM-DD HH:MM:SS">
+                <label for="conversation_key"><i class="fas fa-comments"></i> Conversation to Edit</label>
+                <select name="conversation_key" id="conversation_key" required>
+                    <option value="">Select a conversation</option>
+                    {% for conv in conversations %}
+                    <option value="{{ conv.User_N }}||{{ conv.Connect_N }}||{{ conv.StartStr }}"
+                        {% if selected_key == (conv.User_N ~ '||' ~ conv.Connect_N ~ '||' ~ conv.StartStr) %}selected{% endif %}>
+                        {{ conv.User_N }} ↔ {{ conv.Connect_N }} — {{ conv.StartStr }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">No more copy/paste needed—the key fields are included automatically.</small>
             </div>
 
             <div class="form-row">

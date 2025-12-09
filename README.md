@@ -1,6 +1,6 @@
 ```bash
 # clone / enter project
-cd databases
+cd networking-db
 
 # python virtual env
 python3 -m venv venv

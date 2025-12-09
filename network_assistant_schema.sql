@@ -98,7 +98,6 @@ CREATE TABLE Worked (
   Department VARCHAR(120),
   Location VARCHAR(120),
   PRIMARY KEY (Name, Org_N),
-  CONSTRAINT fk_worked_user FOREIGN KEY (Name) REFERENCES User(Name),
   CONSTRAINT fk_worked_org FOREIGN KEY (Org_N) REFERENCES Organization(Name)
 ) ENGINE=InnoDB;
 
@@ -121,7 +120,6 @@ CREATE TABLE Went_To (
   Subject VARCHAR(120),
   Graduation DATE,
   PRIMARY KEY (Name, School_N),
-  CONSTRAINT fk_wentto_user FOREIGN KEY (Name) REFERENCES User(Name),
   CONSTRAINT fk_wentto_school FOREIGN KEY (School_N) REFERENCES School(Org_N)
 ) ENGINE=InnoDB;
 

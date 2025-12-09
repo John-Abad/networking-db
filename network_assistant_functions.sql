@@ -3,6 +3,7 @@ DELIMITER $$
 /* =========================================================
    Function 1: Add_Connection_By_Talking
    ========================================================= */
+DROP PROCEDURE IF EXISTS Add_Connection_By_Talking;
 CREATE PROCEDURE Add_Connection_By_Talking (
     IN p_User_N       VARCHAR(100),
     IN p_Connect_N    VARCHAR(100),
@@ -130,6 +131,7 @@ END$$
 /* =========================================================
    Function 2: Delete_Connection
    ========================================================= */
+DROP PROCEDURE IF EXISTS Delete_Connection;
 CREATE PROCEDURE Delete_Connection (
     IN p_Connect_N VARCHAR(100)
 )
@@ -187,6 +189,7 @@ END$$
 /* =========================================================
    Function 3: Update_Conversation
    ========================================================= */
+DROP PROCEDURE IF EXISTS Update_Conversation;
 CREATE PROCEDURE Update_Conversation (
     IN p_User_N      VARCHAR(100),
     IN p_Connect_N   VARCHAR(100),
@@ -219,6 +222,7 @@ END$$
 /* =========================================================
    Function 4: Add_Work_Experience
    ========================================================= */
+DROP PROCEDURE IF EXISTS Add_Work_Experience;
 CREATE PROCEDURE Add_Work_Experience (
     IN p_Name          VARCHAR(100),
     IN p_Org_N         VARCHAR(150),
@@ -283,6 +287,7 @@ END$$
 /* =========================================================
    Function 5: Search_Connections_By_Company_Industry_Location
    ========================================================= */
+DROP PROCEDURE IF EXISTS Search_Connections_By_Company_Industry_Location;
 CREATE PROCEDURE Search_Connections_By_Company_Industry_Location (
     IN p_User_N   VARCHAR(100),
     IN p_Company  VARCHAR(150),
@@ -320,6 +325,7 @@ END$$
 /* =========================================================
    Function 6: Last_Time_Contacted
    ========================================================= */
+DROP PROCEDURE IF EXISTS Last_Time_Contacted;
 CREATE PROCEDURE Last_Time_Contacted (
     IN p_User_N    VARCHAR(100),
     IN p_Connect_N VARCHAR(100)
@@ -343,6 +349,7 @@ END$$
 /* =========================================================
    Function 7: Connections_In_City
    ========================================================= */
+DROP PROCEDURE IF EXISTS Connections_In_City;
 CREATE PROCEDURE Connections_In_City (
     IN p_City   VARCHAR(120),
     IN p_User_N VARCHAR(100)

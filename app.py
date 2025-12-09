@@ -27,6 +27,8 @@ def get_db_connection():
     """Create and return a database connection"""
     try:
         connection = mysql.connector.connect(**DB_CONFIG)
+        # Ensure stored procedures that perform writes are committed automatically
+        connection.autocommit = True
         return connection
     except Error as e:
         print(f"Error connecting to MySQL: {e}")
@@ -173,14 +175,30 @@ def applications():
 
 @app.route('/education')
 def education():
-    """Display all education records"""
+    """Display all education records for users and connections."""
     education_data = execute_query("""
-        SELECT wt.*, u.Name as UserName, o.Name as SchoolName, o.Address as SchoolAddress,
-               s.Enrollment, s.Ranking
+        SELECT
+            wt.*,
+            COALESCE(u.Name, c.Name) AS PersonName,
+            CASE
+                WHEN u.Name IS NOT NULL THEN 'User'
+                WHEN c.Name IS NOT NULL THEN 'Connection'
+                ELSE 'Unknown'
+            END AS PersonType,
+            o.Name AS SchoolName,
+            o.Address AS SchoolAddress,
+            s.Enrollment,
+            s.Ranking
         FROM Went_To wt
-        JOIN User u ON wt.Name = u.Name
-        JOIN School s ON wt.School_N = s.Org_N
-        JOIN Organization o ON s.Org_N = o.Name AND s.Org_A = o.Address
+        LEFT JOIN User u
+          ON wt.Name = u.Name
+        LEFT JOIN Connection c
+          ON wt.Name = c.Name
+        JOIN School s
+          ON wt.School_N = s.Org_N
+        JOIN Organization o
+          ON s.Org_N = o.Name
+         AND s.Org_A = o.Address
         ORDER BY wt.Graduation DESC
     """)
     return render_template('education.html', education=education_data or [])
@@ -191,6 +209,24 @@ def _opt(value):
         return None
     value = value.strip()
     return value if value != "" else None
+
+
+def _normalize_dt(value):
+    """
+    Accept datetime-local strings (YYYY-MM-DDTHH:MM[:SS]) and
+    convert them into MySQL-friendly 'YYYY-MM-DD HH:MM:SS'.
+    """
+    value = _opt(value)
+    if not value:
+        return None
+    if value.endswith('Z'):
+        value = value[:-1]
+    if 'T' in value:
+        value = value.replace('T', ' ')
+    # datetime-local often omits seconds; pad if we only have YYYY-MM-DD HH:MM
+    if len(value) == 16:
+        value = f"{value}:00"
+    return value
 
 
 @app.route('/add/conversation', methods=['GET', 'POST'])
@@ -229,8 +265,8 @@ def add_conversation():
         email = _opt(request.form.get('email'))
         topic = _opt(request.form.get('topic'))
         method = _opt(request.form.get('method'))
-        start = _opt(request.form.get('start'))
-        end = _opt(request.form.get('end'))
+        start = _normalize_dt(request.form.get('start'))
+        end = _normalize_dt(request.form.get('end'))
 
         # Optional company / work info
         org_n = _opt(request.form.get('org_n'))
@@ -332,44 +368,70 @@ def update_conversation():
         ORDER BY t.Start DESC
     """) or []
 
+    # Pre-format start timestamps for selectors to avoid manual typing errors
+    for conv in conversations:
+        start_val = conv.get('Start')
+        if isinstance(start_val, datetime):
+            conv['StartStr'] = start_val.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            conv['StartStr'] = str(start_val)
+
     updated_row = None
+    selected_key = ''
 
     if request.method == 'POST':
-        user_n = request.form.get('user_n')
-        connect_n = request.form.get('connect_n')
-        key_start = request.form.get('key_start')
+        conversation_key = request.form.get('conversation_key')
+        if not conversation_key:
+            flash('Please select a conversation to update.', 'error')
+            return render_template(
+                'update_conversation.html',
+                conversations=conversations,
+                updated_row=updated_row,
+                selected_key=selected_key,
+            )
+
+        try:
+            user_n, connect_n, key_start = conversation_key.split('||')
+        except ValueError:
+            flash('Invalid conversation selection.', 'error')
+            return render_template(
+                'update_conversation.html',
+                conversations=conversations,
+                updated_row=updated_row,
+                selected_key=selected_key,
+            )
+
+        selected_key = conversation_key
 
         new_topic = _opt(request.form.get('new_topic'))
         new_method = _opt(request.form.get('new_method'))
-        new_start = _opt(request.form.get('new_start'))
-        new_end = _opt(request.form.get('new_end'))
+        new_start = _normalize_dt(request.form.get('new_start'))
+        new_end = _normalize_dt(request.form.get('new_end'))
 
-        if not (user_n and connect_n and key_start):
-            flash('User, connection, and original start time are required.', 'error')
+        rows = execute_query(
+            "CALL Update_Conversation(%s,%s,%s,%s,%s,%s,%s)",
+            (
+                user_n,
+                connect_n,
+                key_start,
+                new_topic,
+                new_method,
+                new_start,
+                new_end,
+            ),
+            fetch=True,
+        )
+        if rows:
+            updated_row = rows[0]
+            flash('Conversation updated.', 'success')
         else:
-            rows = execute_query(
-                "CALL Update_Conversation(%s,%s,%s,%s,%s,%s,%s)",
-                (
-                    user_n,
-                    connect_n,
-                    key_start,
-                    new_topic,
-                    new_method,
-                    new_start,
-                    new_end,
-                ),
-                fetch=True,
-            )
-            if rows:
-                updated_row = rows[0]
-                flash('Conversation updated.', 'success')
-            else:
-                flash('No matching conversation found to update.', 'error')
+            flash('No matching conversation found to update.', 'error')
 
     return render_template(
         'update_conversation.html',
         conversations=conversations,
         updated_row=updated_row,
+        selected_key=selected_key,
     )
 
 
